@@ -1,38 +1,269 @@
 .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  color: #e6eef8;
 }
 
-.App-link {
-  color: #61dafb;
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+
+:root{
+  --bg-deep: #0b0d10;
+  --bg-charcoal: #0f1114;
+  --obsidian: #090a0b;
+  --accent: #f7931a; /* Bitcoin Orange */
+  --glass: rgba(255,255,255,0.03);
+  --muted: #9aa6b2;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.dark-bg{
+  background: linear-gradient(180deg,var(--bg-deep),#070708 60%);
+  min-height:100vh;
+  padding:32px;
+  box-sizing:border-box;
+}
+
+.dashboard{
+  max-width:1680px; /* tuned for 4k */
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: 1fr 420px;
+  gap:28px;
+  align-items:start;
+}
+
+.panel{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+  border-radius:16px;
+  padding:24px;
+  box-shadow: 0 8px 30px rgba(2,6,23,0.7), inset 0 1px 0 rgba(255,255,255,0.02);
+  backdrop-filter: blur(10px) saturate(130%);
+  border: 1px solid rgba(255,255,255,0.03);
+}
+
+/* Signup specific styling for strong orange/black BTC feel */
+.signup-panel{
+  background: linear-gradient(180deg,#040405, #070708);
+  border-radius:18px;
+  padding:32px 36px;
+  max-width:720px;
+  margin:40px auto;
+  box-shadow: 0 20px 60px rgba(2,6,10,0.85), inset 0 1px 0 rgba(255,255,255,0.02);
+  border: 1px solid rgba(247,147,26,0.08);
+}
+
+.signup-header{
+  display:flex;
+  align-items:center;
+  gap:16px;
+}
+
+.signup-logo{
+  width:56px;
+  height:56px;
+  border-radius:12px;
+  background: linear-gradient(135deg,#111213,#2a2a2a);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border: 1px solid rgba(247,147,26,0.14);
+  box-shadow: 0 8px 24px rgba(247,147,26,0.06);
+}
+
+.signup-title{font-size:22px;font-weight:800;color:#fff}
+.signup-sub{color:var(--muted);margin-top:6px}
+
+.form-field{display:flex;flex-direction:column;gap:6px}
+.form-field label{color:var(--muted);font-size:13px}
+.form-field input{background:#0b0b0c;border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:10px;color:#e6eef8}
+.form-field input::placeholder{color:#6f7781}
+.form-field input:focus{outline:none;border-color:var(--accent);box-shadow:0 6px 18px rgba(247,147,26,0.12)}
+
+.form-actions{display:flex;gap:12px;margin-top:8px}
+.btn-primary{background:linear-gradient(90deg,var(--accent),#ff8a3d);color:#0b0b0c;padding:12px 18px;border-radius:12px;border:none;font-weight:800;cursor:pointer}
+.btn-secondary{background:transparent;color:#e6eef8;padding:12px 18px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);cursor:pointer}
+
+@media (max-width:720px){
+  .dashboard{grid-template-columns:1fr}
+  .right-column{order:3}
+  .signup-panel{margin:20px;padding:20px}
+}
+
+/* Modal styles for in-app withdraw input */
+.modal-overlay{position:fixed;inset:0;background:rgba(2,6,10,0.6);display:flex;align-items:center;justify-content:center;z-index:60}
+.modal{background:#070708;border-radius:12px;padding:20px;max-width:420px;width:92%;box-shadow:0 24px 80px rgba(2,6,10,0.9);border:1px solid rgba(255,255,255,0.04)}
+.modal input{width:100%;box-sizing:border-box}
+
+/* Plan selection styling (orange + black theme) */
+.plans-panel{max-width:880px;margin:40px auto;padding:28px;border-radius:16px;background:linear-gradient(180deg,#040405,#070708);border:1px solid rgba(247,147,26,0.06);box-shadow:0 20px 60px rgba(2,6,10,0.85)}
+.plans-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+.plan-card{padding:20px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.005));border:1px solid rgba(255,255,255,0.03);}
+.plan-name{font-size:18px;font-weight:800;color:#fff}
+.plan-desc{color:var(--muted);margin-top:8px}
+.plan-price{margin-top:12px;font-size:20px;font-weight:800;color:#fff}
+.plan-cta{margin-top:14px}
+.plan-cta .action-btn{width:100%;background:linear-gradient(90deg,var(--accent),#ff8a3d);color:#070708;border:none}
+.plan-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(247,147,26,0.08);color:var(--accent);font-weight:700;font-size:13px}
+
+.plan-features{margin-top:12px;color:var(--muted);padding-left:0}
+.plan-features li{margin-bottom:8px;list-style:none;padding-left:20px;position:relative}
+.plan-features li:before{content:'';width:10px;height:10px;border-radius:50%;background:var(--accent);position:absolute;left:0;top:6px}
+
+.plan-active{display:inline-block;padding:10px 14px;border-radius:10px;background:rgba(247,147,26,0.12);color:var(--accent);font-weight:700}
+
+@media (max-width:900px){
+  .plans-grid{grid-template-columns:1fr}
+}
+
+.header-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+}
+
+.login-header{
+  display:flex;
+  gap:12px;
+  align-items:center;
+}
+
+.login-input{
+  background: rgba(255,255,255,0.02);
+  border:1px solid rgba(255,255,255,0.03);
+  color:var(--muted);
+  padding:8px 10px;
+  border-radius:8px;
+  width:160px;
+}
+
+.btn-logout{
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid rgba(247,147,26,0.12);
+  padding:8px 12px;
+  border-radius:10px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.main-left{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.balance-card{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.balance-left{
+  display:flex;
+  flex-direction:column;
+}
+
+.btc-amount{
+  font-size:64px;
+  font-weight:800;
+  color: #ffffff;
+  letter-spacing: -1px;
+}
+
+.usd-amount{
+  color:var(--muted);
+  margin-top:6px;
+  font-size:18px;
+}
+
+.actions{
+  display:flex;
+  gap:14px;
+}
+
+.action-btn{
+  background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:12px;
+  padding:14px 18px;
+  color:#e8f2fb;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  min-width:140px;
+  justify-content:center;
+  cursor:pointer;
+  border:1px solid rgba(255,255,255,0.03);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+.action-icon{
+  width:28px;
+  height:28px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  filter: drop-shadow(0 4px 14px rgba(247,147,26,0.12));
+}
+
+.tx-list{
+  margin-top:6px;
+}
+
+.tx-item{
+  display:flex;
+  justify-content:space-between;
+  padding:12px 10px;
+  border-radius:10px;
+  align-items:center;
+  gap:8px;
+}
+
+.tx-meta{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.tx-amount{
+  font-weight:700;
+}
+
+.right-column{
+  display:flex;
+  flex-direction:column;
+  gap:20px;
+}
+
+.chart-wrap{
+  height:260px;
+}
+
+.small-muted{
+  color:var(--muted);
+  font-size:13px;
+}
+
+.accent{color:var(--accent)}
+
+/* Payment method tiles used in PaymentGateway */
+.pay-method{
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005));
+  border:1px solid rgba(255,255,255,0.03);
+  padding:12px 14px;
+  border-radius:10px;
+  text-align:left;
+  color:#e6eef8;
+  cursor:pointer;
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s;
+}
+.pay-method:hover{transform:translateY(-3px);box-shadow:0 10px 30px rgba(2,6,10,0.6);border-color:rgba(247,147,26,0.06)}
+.pay-method.selected{border-color:rgba(247,147,26,0.18);box-shadow:0 12px 40px rgba(247,147,26,0.06);background:linear-gradient(180deg, rgba(247,147,26,0.02), rgba(255,255,255,0.01))}
+.pay-method .small-muted{color:var(--muted);font-size:13px;margin-top:6px}
+.pay-method .method-title{font-weight:700}
+
+/* Larger screens tweak */
+@media (min-width:2200px){
+  .btc-amount{font-size:96px}
+  .dashboard{grid-template-columns: 1fr 520px}
 }
